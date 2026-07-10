@@ -1109,3 +1109,13 @@
 2026-07-10 12:20:16.999 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.34, 'ask': 4115.67}
 2026-07-10 12:20:22.002 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.24, 'ask': 4115.57}
 2026-07-10 12:20:27.003 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.06, 'ask': 4115.4}
+2026-07-10 12:20:32.003 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.97, 'ask': 4115.3}
+2026-07-10 12:20:37.003 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.2, 'ask': 4114.54}
+2026-07-10 12:20:42.002 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.17, 'ask': 4114.5}
+2026-07-10 12:20:47.003 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.75, 'ask': 4115.08}
+2026-07-10 12:20:52.003 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.22, 'ask': 4115.55}
+2026-07-10 12:20:57.003 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.41, 'ask': 4115.74}
+2026-07-10 12:21:02.003 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.32, 'ask': 4115.65}
+2026-07-10 12:21:06.999 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.56, 'ask': 4115.89}
+2026-07-10 12:21:11.999 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.49, 'ask': 4115.82}
+2026-07-10 12:21:17.003 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.33, 'ask': 4115.66}
