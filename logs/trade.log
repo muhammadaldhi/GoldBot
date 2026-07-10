@@ -1,2 +1,11 @@
 2026-07-10 09:03:20.266 | INFO     | __main__:<module>:8 - BUY XAUUSD 0.01
 2026-07-10 09:39:05.683 | INFO     | __main__:<module>:8 - BUY XAUUSD 0.01
+2026-07-10 11:08:21.667 | INFO     | backend.services.order_service:send_order:68 - BUY XAUUSD 0.01
+2026-07-10 11:20:06.976 | INFO     | backend.services.order_service:send_order:68 - BUY XAUUSD 0.01
+2026-07-10 11:20:46.206 | INFO     | backend.services.order_service:send_order:68 - BUY XAUUSD 0.01
+2026-07-10 11:23:06.409 | INFO     | backend.services.order_service:send_order:68 - BUY XAUUSD 0.01
+2026-07-10 11:28:08.322 | INFO     | backend.services.order_service:send_order:68 - BUY XAUUSD 0.01
+2026-07-10 11:29:22.654 | INFO     | backend.services.order_service:send_order:68 - BUY XAUUSD 0.01
+2026-07-10 11:35:20.144 | INFO     | backend.services.order_service:send_order:72 - BUY XAUUSD 0.01
+2026-07-10 11:49:57.491 | INFO     | backend.services.order_service:send_order:102 - BUY XAUUSD 0.01
+2026-07-10 11:53:56.810 | INFO     | backend.services.order_service:send_order:102 - BUY XAUUSD 0.01

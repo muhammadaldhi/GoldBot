@@ -3,12 +3,13 @@ from loguru import logger
 import sys
 
 
-# Folder logs
-LOG_DIR = Path("logs")
+# Root project
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
 
-# Hapus handler bawaan
 logger.remove()
 
 
@@ -23,7 +24,7 @@ logger.add(
 )
 
 
-# App Log
+# App log
 logger.add(
     LOG_DIR / "app.log",
     level="INFO",
@@ -33,7 +34,7 @@ logger.add(
 )
 
 
-# Error Log
+# Error log
 logger.add(
     LOG_DIR / "error.log",
     level="ERROR",
@@ -43,7 +44,7 @@ logger.add(
 )
 
 
-# Trade Log
+# Trade log
 logger.add(
     LOG_DIR / "trade.log",
     level="INFO",
