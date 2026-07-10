@@ -8,3 +8,7 @@ requests
 pandas
 numpy
 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
+git add .
+git commit -m "update"
+git branch -M main
+git push -u origin main
