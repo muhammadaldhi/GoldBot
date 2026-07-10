@@ -1043,3 +1043,15 @@
 2026-07-10 12:14:46.997 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.25, 'ask': 4114.58}
 2026-07-10 12:14:52.001 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.18, 'ask': 4114.51}
 2026-07-10 12:14:56.997 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4113.96, 'ask': 4114.28}
+2026-07-10 12:15:02.007 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.09, 'ask': 4114.41}
+2026-07-10 12:15:07.002 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.31, 'ask': 4114.63}
+2026-07-10 12:15:12.000 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.5, 'ask': 4114.82}
+2026-07-10 12:15:16.997 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4114.7, 'ask': 4115.02}
+2026-07-10 12:15:21.997 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.11, 'ask': 4115.43}
+2026-07-10 12:15:26.997 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.42, 'ask': 4115.74}
+2026-07-10 12:15:31.997 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.86, 'ask': 4116.19}
+2026-07-10 12:15:36.999 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.51, 'ask': 4115.83}
+2026-07-10 12:15:41.998 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.28, 'ask': 4115.6}
+2026-07-10 12:15:46.999 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.45, 'ask': 4115.77}
+2026-07-10 12:15:51.997 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.49, 'ask': 4115.81}
+2026-07-10 12:15:56.998 | INFO     | backend.api.main:mt5_tick:71 - Tick received: {'symbol': 'XAUUSD', 'bid': 4115.06, 'ask': 4115.38}
