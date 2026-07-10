@@ -7,7 +7,7 @@ loguru
 requests
 pandas
 numpy
-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
+
 git add .
 git commit -m "update"
 git branch -M update
