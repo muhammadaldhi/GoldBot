@@ -7,8 +7,10 @@ loguru
 requests
 pandas
 numpy
-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
+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
 git add .
 git commit -m "update"
-git branch -M main
-git push -u origin main
+git branch -M update
+git remote add origin https://github.com/muhammadaldhi/GoldBot.git
+git push -u origin update
+
