@@ -368,16 +368,15 @@ void SendOrderFailed(
 //====================================================
 // POSITION SYNC
 //====================================================
-
 void SendPositions()
 {
 
-   string json="[";
+   string json = "[";
+
+   bool first = true;
 
 
-   int total =
-   PositionsTotal();
-
+   int total = PositionsTotal();
 
 
    for(
@@ -391,14 +390,31 @@ void SendPositions()
       PositionGetTicket(i);
 
 
-
-      if(!PositionSelectByTicket(ticket))
+      if(
+         !PositionSelectByTicket(ticket)
+      )
          continue;
 
 
 
-      if(i>0)
+      if(!first)
+      {
          json += ",";
+      }
+
+
+      first = false;
+
+
+
+      string type =
+      PositionGetInteger(
+         POSITION_TYPE
+      ) == POSITION_TYPE_BUY
+      ?
+      "BUY"
+      :
+      "SELL";
 
 
 
@@ -413,16 +429,6 @@ void SendPositions()
          POSITION_SYMBOL
       )
       +"\",";
-
-
-      string type =
-      PositionGetInteger(
-         POSITION_TYPE
-      )==POSITION_TYPE_BUY
-      ?
-      "BUY"
-      :
-      "SELL";
 
 
       json += "\"type\":\""+
@@ -527,6 +533,11 @@ void SendPositions()
    json += "]";
 
 
+   Print(
+      "Position JSON: ",
+      json
+   );
+
 
    SendRequest(
       API_URL+"/mt5/positions",
@@ -536,6 +547,10 @@ void SendPositions()
 }
 
 
+
+//====================================================
+// HTTP POST
+//====================================================
 
 //====================================================
 // HTTP POST
@@ -559,12 +574,28 @@ void SendRequest(
 
 
 
+   int size =
    StringToCharArray(
       json,
-      data
+      data,
+      0,
+      WHOLE_ARRAY,
+      CP_UTF8
    );
 
 
+   // buang NULL terminator
+   if(size > 0)
+   {
+      ArrayResize(
+         data,
+         size - 1
+      );
+   }
+
+
+
+   int code =
    WebRequest(
       "POST",
       url,
@@ -575,8 +606,39 @@ void SendRequest(
       response_headers
    );
 
-}
 
+
+   Print(
+      "POST ",
+      url,
+      " HTTP CODE=",
+      code
+   );
+
+
+   if(code != 200)
+   {
+
+      Print(
+         "WebRequest error: ",
+         GetLastError()
+      );
+
+   }
+
+
+   string response =
+   CharArrayToString(
+      result
+   );
+
+
+   Print(
+      "Response: ",
+      response
+   );
+
+}
 
 
 //====================================================

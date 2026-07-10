@@ -6,6 +6,7 @@ from fastapi import (
 from backend.utils import get_logger
 
 from backend.mt5_bridge import bridge
+from backend.services.strategy_service import strategy_service
 
 from backend.services.order_service import (
     order_service
@@ -529,22 +530,15 @@ def test_strategy():
 
     from backend.strategies.gold_strategy import GoldStrategy
 
-
-    prices = [
-        4100,
-        4102,
-        4105,
-        4108,
-        4110,
-        4115,
-        4118,
-        4120
-    ]
-
+    prices = bridge.get_prices()
 
     engine = GoldStrategy()
-
 
     return engine.analyze(
         prices
     )
+
+@app.get("/strategy/run")
+def run_strategy():
+
+    return strategy_service.run()
