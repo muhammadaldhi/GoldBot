@@ -55,7 +55,7 @@ class SessionConfig:
 
 @dataclass
 class DatabaseConfig:
-    DATABASE_URL = "sqlite:///data/goldbot.db"
+    DATABASE_URL: str = "sqlite:///data/goldbot.db"
 
 
 @dataclass
