@@ -1,0 +1,9 @@
+fastapi
+uvicorn 
+sqlalchemy 
+pydantic 
+python-dotenv 
+loguru 
+requests 
+pandas 
+numpy 
