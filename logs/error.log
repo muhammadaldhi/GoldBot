@@ -16,3 +16,6 @@
 2026-07-10 11:27:49.491 | ERROR    | backend.services.order_service:send_order:61 - Cannot send order. MT5 disconnected
 2026-07-10 11:28:08.318 | ERROR    | backend.services.order_service:send_order:55 - Cannot send order. MT5 disconnected
 2026-07-10 11:29:22.652 | ERROR    | backend.services.order_service:send_order:55 - Cannot send order. MT5 disconnected
+2026-07-10 14:11:00.605 | ERROR    | backend.api.main:sync_positions:335 - JSON ERROR: Extra data: line 1 column 3 (char 2)
+2026-07-10 14:11:05.560 | ERROR    | backend.api.main:sync_positions:335 - JSON ERROR: Extra data: line 1 column 3 (char 2)
+2026-07-10 14:11:10.548 | ERROR    | backend.api.main:sync_positions:335 - JSON ERROR: Extra data: line 1 column 3 (char 2)

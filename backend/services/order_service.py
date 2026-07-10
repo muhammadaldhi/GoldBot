@@ -2,10 +2,11 @@ from typing import Dict, Any
 
 from backend.utils import get_logger, trade_logger
 from backend.mt5_bridge import bridge
-from backend.services.order_queue import order_queue
+from backend.database.repository import order_repository
 
 
 logger = get_logger()
+
 trade_log = trade_logger()
 
 
@@ -13,107 +14,72 @@ trade_log = trade_logger()
 class OrderService:
 
 
-    def buy(
-        self,
-        symbol: str,
-        lot: float
-    ):
-
-        return self.send_order(
-            {
-                "action": "BUY",
-                "symbol": symbol,
-                "lot": lot
-            }
-        )
-
-
-
-    def sell(
-        self,
-        symbol: str,
-        lot: float
-    ):
-
-        return self.send_order(
-            {
-                "action": "SELL",
-                "symbol": symbol,
-                "lot": lot
-            }
-        )
-
-
-
     def send_order(
         self,
         order: Dict[str, Any]
     ):
 
-
         if not bridge.connected:
 
-            logger.error(
-                "MT5 disconnected"
+            return {
+                "status": "failed",
+                "reason": "MT5 disconnected"
+            }
+
+
+        saved = order_repository.create(
+
+            symbol=order["symbol"],
+
+            action=order["action"],
+
+            volume=order.get(
+                "volume",
+                0.01
+            ),
+
+            sl=order.get(
+                "sl",
+                0
+            ),
+
+            tp=order.get(
+                "tp",
+                0
+            ),
+
+            magic=order.get(
+                "magic",
+                777001
+            ),
+
+            comment=order.get(
+                "comment",
+                "GoldBot"
             )
 
-            return {
-                "status":"failed",
-                "reason":"MT5 disconnected"
-            }
-
-
-
-        required = [
-            "action",
-            "symbol",
-            "lot"
-        ]
-
-
-        for field in required:
-
-            if field not in order:
-
-                return {
-                    "status":"failed",
-                    "reason":f"missing {field}"
-                }
-
-
-
-        if order["action"] not in [
-            "BUY",
-            "SELL"
-        ]:
-
-            return {
-                "status":"failed",
-                "reason":"invalid action"
-            }
-
-
-
-        queued = order_queue.add(
-            order
         )
 
 
         trade_log.info(
-            f"{order['action']} "
-            f"{order['symbol']} "
-            f"{order['lot']}"
+            f"QUEUE "
+            f"{saved.action} "
+            f"{saved.symbol} "
+            f"{saved.volume}"
         )
 
 
         logger.info(
-            f"Order queued: {queued}"
+            f"Order queued ID={saved.id}"
         )
 
 
         return {
-            "status":"queued",
-            "order":queued
+
+            "status": "queued",
+
+            "order_id": saved.id
+
         }
 
 

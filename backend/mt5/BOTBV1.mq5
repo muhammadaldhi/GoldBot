@@ -2,8 +2,10 @@
 
 #include <Trade/Trade.mqh>
 
-
 CTrade trade;
+
+
+input long MagicNumber = 777001;
 
 
 string API_URL = "http://127.0.0.1:5000";
@@ -21,6 +23,11 @@ int OnInit()
 {
 
    Print("BOTBV1 Started");
+
+
+   trade.SetExpertMagicNumber(
+      MagicNumber
+   );
 
 
    SendConnect();
@@ -61,8 +68,9 @@ void OnTimer()
 
    SendTick();
 
-
    CheckOrder();
+
+   SendPositions();
 
 }
 
@@ -92,7 +100,7 @@ void SendConnect()
 
 
 //====================================================
-// SEND TICK
+// TICK
 //====================================================
 
 void SendTick()
@@ -116,17 +124,11 @@ void SendTick()
    "{"
    "\"symbol\":\"XAUUSD\","
    "\"bid\":"+
-   DoubleToString(
-      bid,
-      2
-   )
+   DoubleToString(bid,2)
    +
    ","
    "\"ask\":"+
-   DoubleToString(
-      ask,
-      2
-   )
+   DoubleToString(ask,2)
    +
    "}";
 
@@ -141,7 +143,7 @@ void SendTick()
 
 
 //====================================================
-// CHECK ORDER QUEUE
+// GET ORDER
 //====================================================
 
 void CheckOrder()
@@ -152,11 +154,11 @@ void CheckOrder()
 
 
    char data[];
+
    char result[];
 
    string headers =
    "Content-Type: application/json\r\n";
-
 
    string response_headers;
 
@@ -174,18 +176,8 @@ void CheckOrder()
    );
 
 
-
    if(code != 200)
-   {
-
-      Print(
-         "Order request failed ",
-         GetLastError()
-      );
-
       return;
-
-   }
 
 
 
@@ -195,26 +187,13 @@ void CheckOrder()
    );
 
 
-
-   Print(
-      "Order response: ",
-      response
-   );
-
-
-
    if(
       StringFind(
          response,
          "\"status\":\"empty\""
-      )
-      >=0
+      ) >= 0
    )
-   {
-
       return;
-
-   }
 
 
 
@@ -239,21 +218,24 @@ void CheckOrder()
    );
 
 
-   double lot =
+   double volume =
    GetDoubleValue(
       response,
-      "lot"
+      "volume"
    );
 
 
+   double sl =
+   GetDoubleValue(
+      response,
+      "sl"
+   );
 
-   Print(
-      "Execute ",
-      action,
-      " ",
-      symbol,
-      " ",
-      lot
+
+   double tp =
+   GetDoubleValue(
+      response,
+      "tp"
    );
 
 
@@ -267,12 +249,15 @@ void CheckOrder()
 
       success =
       trade.Buy(
-         lot,
-         symbol
+         volume,
+         symbol,
+         0,
+         sl,
+         tp,
+         "GoldBot"
       );
 
    }
-
 
 
    if(action=="SELL")
@@ -280,8 +265,12 @@ void CheckOrder()
 
       success =
       trade.Sell(
-         lot,
-         symbol
+         volume,
+         symbol,
+         0,
+         sl,
+         tp,
+         "GoldBot"
       );
 
    }
@@ -310,7 +299,7 @@ void CheckOrder()
 
 
 //====================================================
-// CALLBACK DONE
+// SEND ORDER DONE
 //====================================================
 
 void SendOrderDone(
@@ -318,19 +307,31 @@ void SendOrderDone(
 )
 {
 
-   string url =
-   API_URL
+   ulong ticket =
+   trade.ResultOrder();
+
+
+   string json =
+   "{"
+   "\"ticket\":"
    +
-   "/mt5/order/"
+   IntegerToString(
+      ticket
+   )
    +
-   IntegerToString(id)
-   +
-   "/done";
+   "}";
 
 
    SendRequest(
-      url,
-      "{}"
+      API_URL
+      +
+      "/mt5/order/"
+      +
+      IntegerToString(id)
+      +
+      "/done",
+
+      json
    );
 
 }
@@ -338,7 +339,7 @@ void SendOrderDone(
 
 
 //====================================================
-// CALLBACK FAILED
+// SEND FAILED
 //====================================================
 
 void SendOrderFailed(
@@ -346,19 +347,190 @@ void SendOrderFailed(
 )
 {
 
-   string url =
-   API_URL
-   +
-   "/mt5/order/"
-   +
-   IntegerToString(id)
-   +
-   "/failed";
+   SendRequest(
+
+      API_URL
+      +
+      "/mt5/order/"
+      +
+      IntegerToString(id)
+      +
+      "/failed",
+
+      "{\"error\":\"Order failed\"}"
+
+   );
+
+}
+
+
+
+//====================================================
+// POSITION SYNC
+//====================================================
+
+void SendPositions()
+{
+
+   string json="[";
+
+
+   int total =
+   PositionsTotal();
+
+
+
+   for(
+      int i=0;
+      i<total;
+      i++
+   )
+   {
+
+      ulong ticket =
+      PositionGetTicket(i);
+
+
+
+      if(!PositionSelectByTicket(ticket))
+         continue;
+
+
+
+      if(i>0)
+         json += ",";
+
+
+
+      json += "{";
+
+      json += "\"ticket\":"+
+      IntegerToString(ticket)+",";
+
+
+      json += "\"symbol\":\""+
+      PositionGetString(
+         POSITION_SYMBOL
+      )
+      +"\",";
+
+
+      string type =
+      PositionGetInteger(
+         POSITION_TYPE
+      )==POSITION_TYPE_BUY
+      ?
+      "BUY"
+      :
+      "SELL";
+
+
+      json += "\"type\":\""+
+      type
+      +"\",";
+
+
+      json += "\"volume\":"+
+      DoubleToString(
+         PositionGetDouble(
+            POSITION_VOLUME
+         ),
+         2
+      )
+      +",";
+
+
+      json += "\"price_open\":"+
+      DoubleToString(
+         PositionGetDouble(
+            POSITION_PRICE_OPEN
+         ),
+         5
+      )
+      +",";
+
+
+      json += "\"price_current\":"+
+      DoubleToString(
+         PositionGetDouble(
+            POSITION_PRICE_CURRENT
+         ),
+         5
+      )
+      +",";
+
+
+      json += "\"sl\":"+
+      DoubleToString(
+         PositionGetDouble(
+            POSITION_SL
+         ),
+         5
+      )
+      +",";
+
+
+      json += "\"tp\":"+
+      DoubleToString(
+         PositionGetDouble(
+            POSITION_TP
+         ),
+         5
+      )
+      +",";
+
+
+      json += "\"profit\":"+
+      DoubleToString(
+         PositionGetDouble(
+            POSITION_PROFIT
+         ),
+         2
+      )
+      +",";
+
+
+      json += "\"swap\":"+
+      DoubleToString(
+         PositionGetDouble(
+            POSITION_SWAP
+         ),
+         2
+      )
+      +",";
+
+
+      json += "\"commission\":0,";
+
+
+      json += "\"magic\":"+
+      IntegerToString(
+         PositionGetInteger(
+            POSITION_MAGIC
+         )
+      )
+      +",";
+
+
+      json += "\"comment\":\""+
+      PositionGetString(
+         POSITION_COMMENT
+      )
+      +"\"";
+
+
+      json += "}";
+
+   }
+
+
+   json += "]";
+
 
 
    SendRequest(
-      url,
-      "{}"
+      API_URL+"/mt5/positions",
+      json
    );
 
 }
@@ -376,8 +548,8 @@ void SendRequest(
 {
 
    char data[];
-   char result[];
 
+   char result[];
 
    string headers =
    "Content-Type: application/json\r\n";
@@ -389,14 +561,10 @@ void SendRequest(
 
    StringToCharArray(
       json,
-      data,
-      0,
-      StringLen(json)
+      data
    );
 
 
-
-   int res =
    WebRequest(
       "POST",
       url,
@@ -407,24 +575,12 @@ void SendRequest(
       response_headers
    );
 
-
-
-   if(res==-1)
-   {
-
-      Print(
-         "WebRequest error: ",
-         GetLastError()
-      );
-
-   }
-
 }
 
 
 
 //====================================================
-// SIMPLE JSON PARSER
+// JSON STRING
 //====================================================
 
 string GetStringValue(
@@ -434,11 +590,7 @@ string GetStringValue(
 {
 
    string search =
-   "\""
-   +
-   key
-   +
-   "\":\"";
+   "\""+key+"\":\"";
 
 
    int start =
@@ -452,9 +604,7 @@ string GetStringValue(
       return "";
 
 
-
    start += StringLen(search);
-
 
 
    int end =
@@ -475,22 +625,9 @@ string GetStringValue(
 
 
 
-int GetIntValue(
-   string json,
-   string key
-)
-{
-
-   return(
-      (int)GetDoubleValue(
-         json,
-         key
-      )
-   );
-
-}
-
-
+//====================================================
+// JSON NUMBER
+//====================================================
 
 double GetDoubleValue(
    string json,
@@ -499,11 +636,7 @@ double GetDoubleValue(
 {
 
    string search =
-   "\""
-   +
-   key
-   +
-   "\":";
+   "\""+key+"\":" ;
 
 
    int start =
@@ -517,13 +650,10 @@ double GetDoubleValue(
       return 0;
 
 
-
    start += StringLen(search);
 
 
-
    int end=start;
-
 
 
    while(
@@ -539,10 +669,7 @@ double GetDoubleValue(
       );
 
 
-      if(
-         c=="," ||
-         c=="}"
-      )
+      if(c=="," || c=="}")
          break;
 
 
@@ -551,19 +678,27 @@ double GetDoubleValue(
    }
 
 
-
-   string value =
-   StringSubstr(
-      json,
-      start,
-      end-start
+   return StringToDouble(
+      StringSubstr(
+         json,
+         start,
+         end-start
+      )
    );
 
+}
 
-   return(
-      StringToDouble(
-         value
-      )
+
+
+int GetIntValue(
+   string json,
+   string key
+)
+{
+
+   return (int)GetDoubleValue(
+      json,
+      key
    );
 
 }

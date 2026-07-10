@@ -5,74 +5,27 @@ from typing import Optional
 
 from sqlalchemy import (
     DateTime,
+    Float,
     Integer,
-    Numeric,
     String,
     Text,
 )
-from sqlalchemy.orm import Mapped, mapped_column
+
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+)
 
 from .db import Base
 
 
-# =========================
-# Account Model
-# =========================
+# ==========================================================
+# ORDER
+# ==========================================================
 
-class Account(Base):
-    """
-    Menyimpan informasi akun trading.
-    """
+class Order(Base):
 
-    __tablename__ = "accounts"
-
-    id: Mapped[int] = mapped_column(
-        Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-
-    broker: Mapped[str] = mapped_column(
-        String(100),
-        nullable=False
-    )
-
-    account_number: Mapped[str] = mapped_column(
-        String(100),
-        nullable=False
-    )
-
-    balance: Mapped[float] = mapped_column(
-        Numeric(12, 2),
-        default=0
-    )
-
-    equity: Mapped[float] = mapped_column(
-        Numeric(12, 2),
-        default=0
-    )
-
-    currency: Mapped[str] = mapped_column(
-        String(10),
-        default="USD"
-    )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        default=datetime.utcnow
-    )
-
-
-# =========================
-# Trade Model
-# =========================
-
-class Trade(Base):
-    """
-    Menyimpan history transaksi trading.
-    """
-
-    __tablename__ = "trades"
+    __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(
         Integer,
@@ -89,35 +42,193 @@ class Trade(Base):
         String(10),
         nullable=False
     )
-    # BUY / SELL
 
+    volume: Mapped[float] = mapped_column(
+        Float,
+        nullable=False
+    )
 
-    lot: Mapped[float] = mapped_column(
-        Numeric(8, 2),
+    sl: Mapped[float] = mapped_column(
+        Float,
         default=0
     )
 
-    entry_price: Mapped[float] = mapped_column(
-        Numeric(12, 5),
-        nullable=True
-    )
-
-    exit_price: Mapped[float] = mapped_column(
-        Numeric(12, 5),
-        nullable=True
-    )
-
-    profit_loss: Mapped[float] = mapped_column(
-        Numeric(12, 2),
+    tp: Mapped[float] = mapped_column(
+        Float,
         default=0
+    )
+
+    magic: Mapped[int] = mapped_column(
+        Integer,
+        default=777001
+    )
+
+    comment: Mapped[str] = mapped_column(
+        String(100),
+        default="GoldBot"
+    )
+
+    status: Mapped[str] = mapped_column(
+        String(20),
+        default="PENDING"
+    )
+
+    ticket: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        nullable=True
+    )
+
+    error: Mapped[Optional[str]] = mapped_column(
+        Text,
+        nullable=True
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow
+    )
+
+    processed_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime,
+        nullable=True
+    )
+
+
+# ==========================================================
+# POSITION
+# ==========================================================
+
+class Position(Base):
+
+    __tablename__ = "positions"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    ticket: Mapped[int] = mapped_column(
+        Integer,
+        unique=True
+    )
+
+    symbol: Mapped[str] = mapped_column(
+        String(20)
+    )
+
+    type: Mapped[str] = mapped_column(
+        String(10)
+    )
+
+    volume: Mapped[float] = mapped_column(
+        Float
+    )
+
+    price_open: Mapped[float] = mapped_column(
+        Float
+    )
+
+    price_current: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    sl: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    tp: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    profit: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    swap: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    commission: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    magic: Mapped[int] = mapped_column(
+        Integer,
+        default=777001
+    )
+
+    comment: Mapped[str] = mapped_column(
+        String(100),
+        default=""
     )
 
     status: Mapped[str] = mapped_column(
         String(20),
         default="OPEN"
     )
-    # OPEN / CLOSED
 
+    opened_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
+    )
+
+
+# ==========================================================
+# TRADE HISTORY
+# ==========================================================
+
+class Trade(Base):
+
+    __tablename__ = "trades"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    ticket: Mapped[int] = mapped_column(
+        Integer
+    )
+
+    symbol: Mapped[str] = mapped_column(
+        String(20)
+    )
+
+    action: Mapped[str] = mapped_column(
+        String(10)
+    )
+
+    volume: Mapped[float] = mapped_column(
+        Float
+    )
+
+    entry_price: Mapped[float] = mapped_column(
+        Float
+    )
+
+    exit_price: Mapped[Optional[float]] = mapped_column(
+        Float,
+        nullable=True
+    )
+
+    profit: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
 
     opened_at: Mapped[datetime] = mapped_column(
         DateTime,
@@ -125,19 +236,16 @@ class Trade(Base):
     )
 
     closed_at: Mapped[Optional[datetime]] = mapped_column(
-    DateTime,
-    nullable=True
-)
+        DateTime,
+        nullable=True
+    )
 
 
-# =========================
-# Signal Model
-# =========================
+# ==========================================================
+# SIGNAL
+# ==========================================================
 
 class Signal(Base):
-    """
-    Menyimpan hasil analisa bot.
-    """
 
     __tablename__ = "signals"
 
@@ -148,33 +256,86 @@ class Signal(Base):
     )
 
     symbol: Mapped[str] = mapped_column(
-        String(20),
-        nullable=False
+        String(20)
     )
 
     direction: Mapped[str] = mapped_column(
-        String(10),
-        nullable=False
+        String(10)
     )
-    # BUY / SELL
-
 
     strategy: Mapped[str] = mapped_column(
-        String(100),
-        nullable=False
+        String(100)
     )
 
     confidence: Mapped[float] = mapped_column(
-        Numeric(5, 2),
-        default=0
+        Float
     )
 
     note: Mapped[Optional[str]] = mapped_column(
-    Text,
-    nullable=True
-)
+        Text,
+        nullable=True
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.utcnow
+    )
+
+
+# ==========================================================
+# ACCOUNT
+# ==========================================================
+
+class Account(Base):
+
+    __tablename__ = "accounts"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    broker: Mapped[str] = mapped_column(
+        String(100)
+    )
+
+    account_number: Mapped[str] = mapped_column(
+        String(100)
+    )
+
+    balance: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    equity: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    margin: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    free_margin: Mapped[float] = mapped_column(
+        Float,
+        default=0
+    )
+
+    currency: Mapped[str] = mapped_column(
+        String(10),
+        default="USD"
+    )
+
+    leverage: Mapped[int] = mapped_column(
+        Integer,
+        default=100
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
     )

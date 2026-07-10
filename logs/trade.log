@@ -9,3 +9,14 @@
 2026-07-10 11:35:20.144 | INFO     | backend.services.order_service:send_order:72 - BUY XAUUSD 0.01
 2026-07-10 11:49:57.491 | INFO     | backend.services.order_service:send_order:102 - BUY XAUUSD 0.01
 2026-07-10 11:53:56.810 | INFO     | backend.services.order_service:send_order:102 - BUY XAUUSD 0.01
+2026-07-10 12:45:47.431 | INFO     | backend.services.order_service:send_order:40 - QUEUE BUY XAUUSD 0.01
+2026-07-10 12:49:44.590 | INFO     | backend.services.order_service:send_order:40 - QUEUE BUY XAUUSD 0.01
+2026-07-10 12:50:38.675 | INFO     | backend.services.order_service:send_order:40 - QUEUE BUY XAUUSD 0.01
+2026-07-10 13:03:57.632 | INFO     | backend.services.order_service:send_order:40 - QUEUE SELL XAUUSD 0.01
+2026-07-10 13:06:59.028 | INFO     | backend.services.order_service:send_order:40 - QUEUE SELL XAUUSD 0.01
+2026-07-10 13:10:25.341 | INFO     | backend.services.order_service:send_order:40 - QUEUE SELL XAUUSD 0.01
+2026-07-10 13:10:52.489 | INFO     | backend.services.order_service:send_order:40 - QUEUE SELL XAUUSD 0.01
+2026-07-10 13:39:20.433 | INFO     | backend.services.order_service:send_order:64 - QUEUE BUY XAUUSD 0.01
+2026-07-10 14:17:18.446 | INFO     | backend.services.order_service:send_order:64 - QUEUE BUY XAUUSD 0.01
+2026-07-10 14:21:37.568 | INFO     | backend.services.order_service:send_order:64 - QUEUE BUY XAUUSD 0.01
+2026-07-10 14:23:20.457 | INFO     | backend.services.order_service:send_order:64 - QUEUE BUY XAUUSD 0.01
